@@ -218,6 +218,7 @@ This file defines containers for each microservice, separate PostgreSQL database
 
 ## Architecture Diagrams
 **High-Level Architecture Diagram**
+```bash
                            +------------------+
                            |   API Gateway    |
                            +--------+---------+
@@ -236,8 +237,10 @@ This file defines containers for each microservice, separate PostgreSQL database
                                 +-------------------------+
 
                    Service Discovery via Consul (port 8500)
+```
 
 **User Registration Sequence Diagram**
+```bash
 User (Client)         User Service                User DB
    |                       |                         |
    | POST /users/register  |                         |
@@ -247,3 +250,5 @@ User (Client)         User Service                User DB
    |                       |                         |
    |                       | <----- Confirmation ----|
    | <--- 201 Created -----|                         |
+```
+
