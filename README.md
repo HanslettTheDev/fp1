@@ -104,164 +104,146 @@ microservices_project/
   }
   ```
 
-Response: Returns a success message and the created user details.
+**Response:** 
+Returns a success message and the created user details.
 
-POST /users/login Authenticates an existing user. Request Body Example:
+**POST `/users/login`** 
+Authenticates an existing user. 
+**Request Body Example:**
 
 json
 {
 "username": "exampleUser",
 "password": "securepassword"
 }
-Response: On success, returns a confirmation along with user details; otherwise, an error message.
 
-Database Schema:
+**Response:** On success, returns a confirmation along with user details; otherwise, an error message.
 
-User Table: Contains fields for id, username, email, and password (note: in production, always store hashed passwords).
+**Database Schema:**
 
-Consul Registration: The service includes a function in app.py to register with Consul for service discovery.
+**User Table:** Contains fields for id, username, email, and password
 
-Product Service
-Responsibilities:
+**Consul Registration:** The service includes a function in app.py to register with Consul for service discovery.
 
+### Product Service
+**Responsibilities:**
 Manages the product catalog.
 
 Endpoints:
 
-GET /products/ Retrieves a list of all products.
+**GET `/products/`** 
+Retrieves a list of all products.
 
-POST /products/ Adds a new product to the catalog. Request Body Example:
+**POST `/products/`**
+Adds a new product to the catalog. 
+**Request Body Example:**
 
-json
+```json
 {
 "name": "Product Name",
 "description": "A brief description of the product",
 "price": 19.99
 }
-Response: Returns a success message along with the product details.
+```
+**Response:** 
+Returns a success message along with the product details.
 
-Database Schema:
+**Database Schema:**
 
-Product Table: Contains fields for id, name, description, and price.
+**Product Table:** Contains fields for id, name, description, and price.
 
-Consul Registration: Similar to the User Service, it includes registration code to auto-register with Consul.
+**Consul Registration:** Similar to the User Service, it includes registration code to auto-register with Consul.
 
-Notification Service
-Responsibilities:
+### Notification Service
+**Responsibilities:**
 
 Sends notifications via email or SMS (simulated in this setup).
 
-Endpoints:
+**Endpoints:**
 
-POST /notifications/send Sends a notification. Request Body Example:
+**POST `/notifications/send`** 
+Sends a notification. 
+**Request Body Example:**
 
-json
+```json
 {
 "type": "email",
 "recipient": "user@example.com",
 "message": "Your order has been processed!"
 }
-Response: Returns a success message indicating the type of notification sent and its recipient.
+```
 
-Note: This service simulates notifications by printing messages to the console. In the future, it can be integrated with actual email/SMS APIs.
+**Response:** Returns a success message indicating the type of notification sent and its recipient.
 
-Environment Setup & Deployment
-Prerequisites
-Python 3.6 or above
+## Environment Setup & Deployment
+**Prerequisites**
+- Python 3.10 or above
+- Docker & Docker Compose (for containerized deployment)
+- Sqlite (my preferred database system)
 
-Docker & Docker Compose (for containerized deployment)
+**Local Development**
+Setup Virtual Environment:
 
-PostgreSQL (or your preferred database system)
-
-Local Development
-Clone the Repository:
-
-bash
-git clone <repository-url>
-cd microservices_project
-Setup Virtual Environment (optional but recommended):
-
-bash
+```bash
 python -m venv venv
 source venv/bin/activate # On Windows: venv\Scripts\activate
-Install Dependencies for Each Service:
+```
+**Install Dependencies for Each Service:**
 
 For example, for the User Service:
 
-bash
+```bash
 cd user_service
 pip install -r requirements.txt
 cd ..
-Repeat for each service folder.
-
+# Repeat for each service folder.
+```
 Run Each Service Individually:
 
+```
 bash
 python user_service/app.py
 python product_service/app.py
 python order_service/app.py
 python notification_service/app.py
-Deployment with Docker Compose
+```
+
+**Deployment with Docker Compose**
 A pre-configured docker-compose.yml is provided to start all services concurrently. To deploy, run:
 
-bash
+```bash
 docker-compose up --build
+```
 This file defines containers for each microservice, separate PostgreSQL databases for each service, and a Consul container for service discovery.
 
-Architecture Diagrams
-High-Level Architecture Diagram
-+------------------+
-| API Gateway |
-+--------+---------+
-|
-+-------------------------+---------------------------+
-| | |
-+---------v--------+ +--------v--------+ +--------v--------+
-| User Service | | Product Service| | Order Service |
-| (5000 port) | | (5001 port) | | (5002 port) |
-+------------------+ +-----------------+ +-----------------+
-\ /
-\ /
-\ +-------------------------+
----------------+ Notification Service |
-| (5003 port) |
-+-------------------------+
+## Architecture Diagrams
+**High-Level Architecture Diagram**
+                           +------------------+
+                           |   API Gateway    |
+                           +--------+---------+
+                                    |
+          +-------------------------+---------------------------+
+          |                         |                           |
++---------v--------+       +--------v--------+         +--------v--------+
+|  User Service    |       |  Product Service|         |  Order Service  |
+|   (5000 port)    |       |   (5001 port)   |         |   (5002 port)   |
++------------------+       +-----------------+         +-----------------+
+            \                                               /
+             \                                             /
+              \                +-------------------------+
+               ---------------+ Notification Service    |
+                                |      (5003 port)        |
+                                +-------------------------+
 
                    Service Discovery via Consul (port 8500)
 
-User Registration Sequence Diagram
-User (Client) User Service User DB
-| | |
-| POST /users/register | |
-|---------------------->| |
-| | Insert new user record |
-| |------------------------>|
-| | |
-| | <----- Confirmation ----|
-| <--- 201 Created -----| |
-Additional Notes
-Security Considerations: In production, ensure that user passwords are hashed and consider using JWT for secure authentication along with proper error handling and logging.
-
-Service Discovery Enhancements: Although basic Consul registration is included, a production-grade system should configure health checks and dynamic discovery more robustly.
-
-Extensibility: This architecture can be extended to include asynchronous messaging, API gateways for load balancing and request aggregation, and more advanced persistence strategies.
-
-### Installation
-
-Ensure python is installed!. Then type the following in the command line
-
-- For Windows
-
-```cmd
-python -m venv env
-env\Scripts\activate
-pip install -r requirements.txt
-```
-
-- For Linux
-
-```bash
-python3 -m venv env
-source env/bin/activate
-pip install -r requirements.txt
-```
+**User Registration Sequence Diagram**
+User (Client)         User Service                User DB
+   |                       |                         |
+   | POST /users/register  |                         |
+   |---------------------->|                         |
+   |                       | Insert new user record  |
+   |                       |------------------------>|
+   |                       |                         |
+   |                       | <----- Confirmation ----|
+   | <--- 201 Created -----|                         |
