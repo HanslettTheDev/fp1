@@ -107,16 +107,16 @@ microservices_project/
 **Response:** 
 Returns a success message and the created user details.
 
-**POST `/users/login`** 
+- **POST `/users/login`** 
 Authenticates an existing user. 
 **Request Body Example:**
 
-json
+```json
 {
 "username": "exampleUser",
 "password": "securepassword"
 }
-
+```
 **Response:** On success, returns a confirmation along with user details; otherwise, an error message.
 
 **Database Schema:**
@@ -131,10 +131,10 @@ Manages the product catalog.
 
 Endpoints:
 
-**GET `/products/`** 
+- **GET `/products/`** 
 Retrieves a list of all products.
 
-**POST `/products/`**
+- **POST `/products/`**
 Adds a new product to the catalog. 
 **Request Body Example:**
 
@@ -161,7 +161,7 @@ Sends notifications via email or SMS (simulated in this setup).
 
 **Endpoints:**
 
-**POST `/notifications/send`** 
+- **POST `/notifications/send`** 
 Sends a notification. 
 **Request Body Example:**
 
