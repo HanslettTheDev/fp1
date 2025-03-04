@@ -204,7 +204,6 @@ Run Each Service Individually:
 bash
 python user_service/app.py
 python product_service/app.py
-python order_service/app.py
 python notification_service/app.py
 ```
 
