@@ -202,9 +202,9 @@ Run Each Service Individually:
 
 ```
 bash
-python user_service/app.py
-python product_service/app.py
-python notification_service/app.py
+python services/user_service/app.py
+python services/product_service/app.py
+python services/notification_service/app.py
 ```
 
 **Deployment with Docker Compose**
