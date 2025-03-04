@@ -1,0 +1,56 @@
+version: "3.8"
+services:
+  user_service:
+    build: ./services/user_service
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URI=postgresql://user:password@userdb:5432/user_service_db
+    depends_on:
+      - userdb
+      - consul
+
+  product_service:
+    build: ./services/product_service
+    ports:
+      - "5001:5001"
+    environment:
+      - DATABASE_URI=postgresql://user:password@productdb:5432/product_service_db
+    depends_on:
+      - productdb
+      - consul
+
+  notification_service:
+    build: ./services/notification_service
+    ports:
+      - "5003:5003"
+    depends_on:
+      - consul
+
+  consul:
+    image: consul
+    ports:
+      - "8500:8500"
+    command: "agent -dev -client=0.0.0.0"
+
+  userdb:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: user_service_db
+    volumes:
+      - userdb_data:/var/lib/postgresql/data
+
+  productdb:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: product_service_db
+    volumes:
+      - productdb_data:/var/lib/postgresql/data
+
+volumes:
+  userdb_data:
+  productdb_data:

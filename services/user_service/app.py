@@ -1,7 +1,6 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from models import db
 from routes import user_bp
+from models import db
 import os
 
 app = Flask(__name__)
@@ -9,7 +8,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URI", "sqlite:/
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.register_blueprint(user_bp, url_prefix='/users')
 
-db = SQLAlchemy()
 db.init_app(app)
 
 # Optional: register with Consul for service discovery

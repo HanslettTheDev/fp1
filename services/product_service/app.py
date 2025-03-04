@@ -1,10 +1,9 @@
 import os
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from routes import product_bp
+from models import db
 
 app = Flask(__name__)
-db = SQLAlchemy() 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URI", "sqlite:///product_service.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

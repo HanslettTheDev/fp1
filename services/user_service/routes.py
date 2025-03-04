@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models import db, User
+from models import User, db
 
 user_bp = Blueprint('user_bp', __name__)
 
@@ -21,3 +21,4 @@ def login():
     if user:
         return jsonify({"message": "Login successful", "user": user.to_dict()}), 200
     return jsonify({"message": "Invalid credentials"}), 401
+
